@@ -9,6 +9,8 @@
  */
 
 import React, { type PropsWithChildren } from 'react';
+import StorybookUIRoot from './.ondevice/Storybook';
+
 import {
   SafeAreaView,
   ScrollView,
@@ -26,6 +28,7 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { IS_STORYBOOK_MODE } from '@env';
 
 const Section: React.FC<
   PropsWithChildren<{
@@ -117,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default IS_STORYBOOK_MODE ? StorybookUIRoot : App;
