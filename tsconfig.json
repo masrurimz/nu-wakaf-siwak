@@ -11,7 +11,7 @@
   "typeRoots": ["./src/common/types"],
   "baseUrl": ".",
   "paths": {
-    "@src/*": ["src/*"]
+    "@@src/*": ["src/*"]
   },
   "include": ["src"]
 }
