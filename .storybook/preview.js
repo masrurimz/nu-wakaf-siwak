@@ -1,8 +1,9 @@
 import { NativeBaseProvider } from 'native-base';
+import { theme } from '@src/app/config';
 
 export const decorators = [
   Story => (
-    <NativeBaseProvider>
+    <NativeBaseProvider theme={theme}>
       <Story />
     </NativeBaseProvider>
   ),

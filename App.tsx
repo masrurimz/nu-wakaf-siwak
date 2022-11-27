@@ -3,13 +3,14 @@ import { StyleSheet } from 'react-native';
 import { NativeBaseProvider } from 'native-base';
 // @ts-ignore
 import { IS_STORYBOOK_MODE } from '@env';
-import { SplashScreen } from './src/lib/auth';
+import { SplashScreen, WelcomeScreen } from './src/lib/auth';
 import StorybookUIRoot from './.storybook/Storybook';
+import { theme } from './src/app/config';
 
 const App = () => {
   return (
-    <NativeBaseProvider>
-      <SplashScreen />
+    <NativeBaseProvider theme={theme}>
+      <WelcomeScreen />
     </NativeBaseProvider>
   );
 };
