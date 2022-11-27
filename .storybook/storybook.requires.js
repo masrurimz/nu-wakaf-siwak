@@ -27,7 +27,10 @@ if (parameters) {
 }
 
 const getStories = () => {
-  return [require("../src/lib/auth/Splash.screen.stories.tsx")];
+  return [
+    require("../src/lib/auth/Splash.screen.stories.tsx"),
+    require("../src/lib/auth/Welcome.screen.stories.tsx"),
+  ];
 };
 
 configure(getStories, module, false);
