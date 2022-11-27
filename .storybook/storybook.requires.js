@@ -29,6 +29,7 @@ if (parameters) {
 const getStories = () => {
   return [
     require("../src/lib/auth/Login.screen.stories.tsx"),
+    require("../src/lib/auth/Register/Register.screen.stories.tsx"),
     require("../src/lib/auth/Splash.screen.stories.tsx"),
     require("../src/lib/auth/Welcome.screen.stories.tsx"),
   ];
