@@ -14,5 +14,14 @@ module.exports = {
         verbose: false,
       },
     ],
+    [
+      'module-resolver',
+      {
+        root: ['.'],
+        alias: {
+          '@src': './src',
+        },
+      },
+    ],
   ],
 };
