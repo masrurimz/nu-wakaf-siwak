@@ -11,7 +11,7 @@ import React, { useCallback, useEffect } from 'react';
 
 import LogoNU from '@src/app/assets/images/LogoNU.svg';
 import LogoSiwak from '@src/app/assets/images/LogoSiwak.svg';
-// import { theme } from '../../app/config';
+import { theme } from '../../app/config';
 // import { useAppDispatch } from '../../common/hooks';
 // import { RootStackParamList } from '../../app/navigation';
 // import { useLoginMutation } from '../../app/services';
@@ -86,10 +86,10 @@ const SplashScreen = () => {
         bg: 'primary.900',
       }}>
       <StatusBar
-        // backgroundColor={useColorModeValue(
-        //   theme.colors.primary[50],
-        //   theme.colors.primary[900],
-        // )}
+        backgroundColor={useColorModeValue(
+          theme.colors.primary[50],
+          theme.colors.primary[900],
+        )}
         barStyle={useColorModeValue('dark-content', 'light-content')}
       />
       <PresenceTransition
