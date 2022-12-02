@@ -48,66 +48,52 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
   );
 
   const renderSearchBox = () => (
-    <PresenceTransition
-      visible={isSearchMode}
-      initial={{
-        opacity: 0.5,
-        scale: 0.5,
-      }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        transition: {
-          duration: 250,
-        },
-      }}>
-      <Input
-        variant={'filled'}
-        rounded="full"
-        size={'md'}
-        px={0}
-        m={2}
-        placeholder="Masukkan pencarian"
-        InputRightElement={
+    <Input
+      variant={'filled'}
+      rounded="full"
+      size={'md'}
+      px={0}
+      m={2}
+      placeholder="Masukkan pencarian"
+      InputRightElement={
+        <IconButton
+          bg="secondary.100"
+          py={1}
+          px={3}
+          m={1.5}
+          rounded="full"
+          variant="solid"
+          onPress={() => handlePressSearch(searchQuery)}
+          _icon={{
+            as: MaterialCommunityIcons,
+            name: 'magnify',
+            color: 'secondary.600',
+          }}
+        />
+      }
+      InputLeftElement={
+        searchQuery.length > 0 ? (
           <IconButton
-            bg="secondary.100"
-            py={1}
-            px={3}
-            m={1.5}
-            rounded="full"
-            variant="solid"
-            onPress={() => handlePressSearch(searchQuery)}
+            onPress={() => setSearchQuery('')}
+            py={2}
             _icon={{
               as: MaterialCommunityIcons,
-              name: 'magnify',
-              color: 'secondary.600',
+              name: 'close',
             }}
           />
-        }
-        InputLeftElement={
-          searchQuery.length > 0 ? (
-            <IconButton
-              onPress={() => setSearchQuery('')}
-              py={2}
-              _icon={{
-                as: MaterialCommunityIcons,
-                name: 'close',
-              }}
-            />
-          ) : (
-            <IconButton
-              onPress={() => setIsSearchMode(false)}
-              _icon={{
-                as: MaterialCommunityIcons,
-                name: 'arrow-left',
-              }}
-            />
-          )
-        }
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
-    </PresenceTransition>
+        ) : (
+          <IconButton
+            onPress={() => setIsSearchMode(false)}
+            _icon={{
+              as: MaterialCommunityIcons,
+              name: 'arrow-left',
+            }}
+          />
+        )
+      }
+      value={searchQuery}
+      onChangeText={setSearchQuery}
+    />
   );
 
   const render = () => (

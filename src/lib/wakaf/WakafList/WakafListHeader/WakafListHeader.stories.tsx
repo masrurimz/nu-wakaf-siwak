@@ -7,7 +7,7 @@ export default {
   component: WakafListHeader,
 } as ComponentMeta<typeof WakafListHeader>;
 
-export const Verified: ComponentStory<typeof WakafListHeader> = () => (
+export const Basic: ComponentStory<typeof WakafListHeader> = () => (
   <WakafListHeader
     useWakafListHeader={() => ({
       nameFormatted: 'Muhammad Zahid Masruri',
@@ -22,4 +22,4 @@ export const Verified: ComponentStory<typeof WakafListHeader> = () => (
   />
 );
 
-Verified.args = {};
+Basic.args = {};
