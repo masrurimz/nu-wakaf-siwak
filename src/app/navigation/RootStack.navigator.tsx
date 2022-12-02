@@ -6,6 +6,8 @@ import {
   SplashScreen,
   WelcomeScreen,
 } from '../../lib/auth';
+import { theme } from '../config';
+import { useColorModeValue } from 'native-base';
 
 export type RootStackParams = {
   SplashScreen: undefined;
@@ -17,17 +19,31 @@ export type RootStackParams = {
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
 export const RootStackNavigator = () => {
+  const rootStackHeaderBgColor = useColorModeValue(
+    theme.colors.white,
+    theme.colors.dark[50],
+  );
+
+  const rootStackHeaderTintColor = useColorModeValue(
+    theme.colors.dark[50],
+    theme.colors.white,
+  );
+
   return (
-    <RootStack.Navigator>
+    <RootStack.Navigator initialRouteName="LoginScreen">
       <RootStack.Group
         screenOptions={{
           headerShown: false,
+          headerStyle: {
+            backgroundColor: rootStackHeaderBgColor,
+          },
+          headerTintColor: rootStackHeaderTintColor,
         }}>
         <RootStack.Screen name="SplashScreen" component={SplashScreen} />
         <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+        <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
+        <RootStack.Screen name="LoginScreen" component={LoginScreen} />
       </RootStack.Group>
-      <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
-      <RootStack.Screen name="LoginScreen" component={LoginScreen} />
     </RootStack.Navigator>
   );
 };
