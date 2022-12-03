@@ -8,6 +8,7 @@ import {
 } from '../../lib/auth';
 import { theme } from '../config';
 import { useColorModeValue } from 'native-base';
+import RootStackHeader from './RootStackHeader';
 
 export type RootStackParams = {
   SplashScreen: undefined;
@@ -33,11 +34,12 @@ export const RootStackNavigator = () => {
     <RootStack.Navigator initialRouteName="LoginScreen">
       <RootStack.Group
         screenOptions={{
-          headerShown: false,
+          headerShown: true,
           headerStyle: {
             backgroundColor: rootStackHeaderBgColor,
           },
           headerTintColor: rootStackHeaderTintColor,
+          header: RootStackHeader,
         }}>
         <RootStack.Screen name="SplashScreen" component={SplashScreen} />
         <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
