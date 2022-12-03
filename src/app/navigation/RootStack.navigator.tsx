@@ -31,21 +31,25 @@ export const RootStackNavigator = () => {
   );
 
   return (
-    <RootStack.Navigator initialRouteName="LoginScreen">
+    <RootStack.Navigator
+      initialRouteName="WelcomeScreen"
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: rootStackHeaderBgColor,
+        },
+        headerTintColor: rootStackHeaderTintColor,
+        header: RootStackHeader,
+      }}>
       <RootStack.Group
         screenOptions={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: rootStackHeaderBgColor,
-          },
-          headerTintColor: rootStackHeaderTintColor,
-          header: RootStackHeader,
+          headerShown: false,
         }}>
         <RootStack.Screen name="SplashScreen" component={SplashScreen} />
         <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-        <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
-        <RootStack.Screen name="LoginScreen" component={LoginScreen} />
       </RootStack.Group>
+      <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
+      <RootStack.Screen name="LoginScreen" component={LoginScreen} />
     </RootStack.Navigator>
   );
 };

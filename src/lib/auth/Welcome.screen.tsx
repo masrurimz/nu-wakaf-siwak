@@ -1,3 +1,4 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Button,
   Heading,
@@ -11,20 +12,22 @@ import {
 } from 'native-base';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-// import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import WelcomeIllustration from 'src/app/assets/illustrations/WelcomeIllustration.svg';
 import LogoNU from 'src/app/assets/images/LogoNU.svg';
 import LogoSiwak from 'src/app/assets/images/LogoSiwak.svg';
-import WelcomeIllustration from 'src/app/assets/illustrations/WelcomeIllustration.svg';
-// import { RootStackParamList } from '../../app/navigation';
-// import { theme } from '../../app/config';
+import { theme } from '../../app/config';
+import { RootStackParams } from '../../app/navigation';
 
-// type ScreenProps = NativeStackScreenProps<RootStackParamList, 'SplashScreen'>;
+type ScreenProps = NativeStackScreenProps<RootStackParams, 'SplashScreen'>;
+type WelcomeScreenProps = ScreenProps;
 
-const WelcomeScreen = () => {
+const WelcomeScreen = (props: WelcomeScreenProps) => {
+  const { navigation } = props;
+
   return (
     <>
       <StatusBar
-        // backgroundColor={useColorModeValue('white', theme.colors.dark[50])}
+        backgroundColor={useColorModeValue('white', theme.colors.dark[50])}
         barStyle={useColorModeValue('dark-content', 'light-content')}
       />
       <ScrollView
@@ -83,8 +86,12 @@ const WelcomeScreen = () => {
           </VStack>
           <VStack p={5} space={'4'}>
             <VStack space={'2'}>
-              <Button onPress={() => {}}>Masuk</Button>
-              <Button variant={'outline'} onPress={() => {}}>
+              <Button onPress={() => navigation.navigate('LoginScreen')}>
+                Masuk
+              </Button>
+              <Button
+                variant={'outline'}
+                onPress={() => navigation.navigate('RegisterScreen')}>
                 Daftar
               </Button>
             </VStack>
