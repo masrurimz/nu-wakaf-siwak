@@ -1,21 +1,30 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-// import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
 import {
   Button,
   Flex,
   FormControl,
   Heading,
   HStack,
+  Icon,
+  IconButton,
   Input,
   ScrollView,
   Stack,
   Text,
   useToast,
 } from 'native-base';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { sha1 } from 'react-native-sha1';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as yup from 'yup';
+import { RootStackParams } from '../../../app/navigation';
+import { authKeys, authRegisterMutation } from '../../../app/services';
+import { ToastAlert } from '../../../common/components';
+import { ApiResponse } from '../../../common/types/apiResponse';
 
 let registerUserSchema = yup.object({
   nama: yup.string().required().label('Nama'),
@@ -28,52 +37,60 @@ let registerUserSchema = yup.object({
     .oneOf([yup.ref('pass')], 'Passwords must match')
     .label('Ulangi Password'),
 });
-
 type RegisterUser = yup.InferType<typeof registerUserSchema>;
 
-// type ScreenProps = NativeStackScreenProps<RootStackParamList, 'RegisterScreen'>;
-interface RegisterScreenPros {}
+type ScreenProps = NativeStackScreenProps<RootStackParams, 'RegisterScreen'>;
+type RegisterScreenProps = ScreenProps;
 
-const RegisterScreen = ({}: RegisterScreenPros) => {
+const RegisterScreen = (props: RegisterScreenProps) => {
+  const { navigation } = props;
   const toast = useToast();
-
-  // const [register, { isLoading }] = useRegisterMutation();
 
   const { control, handleSubmit } = useForm<RegisterUser>({
     resolver: yupResolver(registerUserSchema),
   });
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordConfirmationVisible, setIsPasswordConfirmationVisible] =
+    useState(false);
+
+  const register = useMutation({
+    mutationKey: authKeys.authRegister,
+    mutationFn: authRegisterMutation,
+    onSuccess(data, variables) {
+      toast.show({
+        render: () => (
+          <ToastAlert
+            title="Pendaftaran Sukses"
+            description={`Silahkan cek email ${variables.email} anda untuk mengkonfirmasi pendaftaran`}
+            status="success"
+            colorScheme="success"
+          />
+        ),
+      });
+    },
+    onError(error: AxiosResponse<ApiResponse<null>>) {
+      toast.show({
+        render: () => (
+          <ToastAlert
+            title="Gagal Mendaftar"
+            description={error.data.msg}
+            status="error"
+            colorScheme="error"
+          />
+        ),
+      });
+    },
+  });
 
   const onSubmit = handleSubmit(async data => {
-    try {
-      const pass = await sha1(data.pass);
-      const repass = await sha1(data.repass);
+    const pass = await sha1(data.pass);
+    const repass = await sha1(data.repass);
 
-      // const resultRegister = await register({
-      //   ...data,
-      //   pass,
-      //   repass,
-      // }).unwrap();
-
-      // if (resultRegister.id !== '00') {
-      //   toast.show({
-      //     title: resultRegister.msg,
-      //     bg: 'danger.600',
-      //     w: 350,
-      //   });
-
-      //   return;
-      // }
-
-      // toast.show({
-      //   title: 'Berhasil mendaftar',
-      //   description: `Silahkan cek email ${resultRegister.data.email} anda untuk mengkonfirmasi pendaftaran`,
-      //   bg: 'success.600',
-      //   w: 350,
-      //   duration: 10000,
-      // });
-
-      // navigation.navigate('LoginScreen');
-    } catch (error) {}
+    register.mutate({
+      ...data,
+      pass,
+      repass,
+    });
   });
 
   return (
@@ -127,6 +144,7 @@ const RegisterScreen = ({}: RegisterScreenPros) => {
                     placeholder="Ex: Zahid@gmail.com"
                     keyboardType="email-address"
                     autoComplete="email"
+                    autoCapitalize="none"
                     value={value}
                     onChangeText={onChange}
                   />
@@ -147,9 +165,23 @@ const RegisterScreen = ({}: RegisterScreenPros) => {
                 <FormControl isInvalid={Boolean(error)}>
                   <FormControl.Label>Kata Sandi</FormControl.Label>
                   <Input
+                    secureTextEntry={!isPasswordVisible}
                     placeholder="Minimal 6 Karakter"
                     value={value}
                     onChangeText={onChange}
+                    InputRightElement={
+                      <IconButton
+                        p={1}
+                        mr={1}
+                        icon={
+                          <Icon
+                            as={MaterialCommunityIcons}
+                            name={isPasswordVisible ? 'eye' : 'eye-off'}
+                          />
+                        }
+                        onPress={() => setIsPasswordVisible(v => !v)}
+                      />
+                    }
                   />
                   <FormControl.ErrorMessage>
                     {error?.message}
@@ -168,9 +200,27 @@ const RegisterScreen = ({}: RegisterScreenPros) => {
                 <FormControl isInvalid={Boolean(error)}>
                   <FormControl.Label>Ulangi Kata Sandi</FormControl.Label>
                   <Input
+                    secureTextEntry={!isPasswordConfirmationVisible}
                     placeholder="Masukkan kembali kata sandi"
                     value={value}
                     onChangeText={onChange}
+                    InputRightElement={
+                      <IconButton
+                        p={1}
+                        mr={1}
+                        icon={
+                          <Icon
+                            as={MaterialCommunityIcons}
+                            name={
+                              isPasswordConfirmationVisible ? 'eye' : 'eye-off'
+                            }
+                          />
+                        }
+                        onPress={() =>
+                          setIsPasswordConfirmationVisible(v => !v)
+                        }
+                      />
+                    }
                   />
                   <FormControl.ErrorMessage>
                     {error?.message}
@@ -181,12 +231,14 @@ const RegisterScreen = ({}: RegisterScreenPros) => {
           </Stack>
         </Stack>
         <Flex flex={1} p={5} justifyContent="flex-end">
-          <Button onPress={onSubmit} isLoading={false}>
+          <Button onPress={onSubmit} isLoading={register.isLoading}>
             Daftar
           </Button>
           <HStack alignItems={'center'} alignSelf="center">
             <Text>Sudah punya akun ?</Text>
-            <Button variant={'link'} onPress={() => {}}>
+            <Button
+              variant={'link'}
+              onPress={() => navigation.navigate('LoginScreen')}>
               Masuk disini
             </Button>
           </HStack>
