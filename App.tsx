@@ -8,7 +8,6 @@ import StorybookUIRoot from './.storybook/Storybook';
 import { theme } from './src/app/config';
 import { AppNavigator } from './src/app/navigation';
 import { queryClient } from './src/app/services';
-import { SafeAreaView, StyleSheet } from 'react-native';
 
 if (__DEV__) {
   import('react-query-native-devtools').then(({ addPlugin }) => {
@@ -18,23 +17,15 @@ if (__DEV__) {
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.safeAreaContainer}>
-      <QueryClientProvider client={queryClient}>
-        <NativeBaseProvider theme={theme}>
-          <NavigationContainer>
-            <AppNavigator />
-          </NavigationContainer>
-        </NativeBaseProvider>
-      </QueryClientProvider>
-    </SafeAreaView>
+    <QueryClientProvider client={queryClient}>
+      <NativeBaseProvider theme={theme}>
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      </NativeBaseProvider>
+    </QueryClientProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  safeAreaContainer: {
-    flex: 1,
-  },
-});
 
 const STORYBOOK = IS_STORYBOOK_MODE === 'true';
 export default STORYBOOK ? StorybookUIRoot : App;

@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import {
+  Box,
   Button,
   Flex,
   FormControl,
@@ -94,157 +95,163 @@ const RegisterScreen = (props: RegisterScreenProps) => {
   });
 
   return (
-    <ScrollView
-      flex={1}
-      _light={{
-        bg: 'white',
-      }}
-      _dark={{
-        bg: 'dark.50',
-      }}>
-      <Flex flex={1}>
-        <Stack p={5} space={6}>
-          <Stack space={2}>
-            <Heading>Daftar</Heading>
-            <Text>Lengkapi form data diri berikut untuk membuat akun baru</Text>
+    <Box safeArea>
+      <ScrollView
+        flex={1}
+        _light={{
+          bg: 'white',
+        }}
+        _dark={{
+          bg: 'dark.50',
+        }}>
+        <Flex flex={1}>
+          <Stack p={5} space={6}>
+            <Stack space={2}>
+              <Heading>Daftar</Heading>
+              <Text>
+                Lengkapi form data diri berikut untuk membuat akun baru
+              </Text>
+            </Stack>
+            <Stack space={2}>
+              <Controller
+                control={control}
+                name="nama"
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <FormControl isInvalid={Boolean(error)}>
+                    <FormControl.Label>Nama</FormControl.Label>
+                    <Input
+                      placeholder="Ex: Muhammad Zahid Masruri"
+                      autoComplete="name"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                    <FormControl.ErrorMessage>
+                      {error?.message}
+                    </FormControl.ErrorMessage>
+                  </FormControl>
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="email"
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <FormControl isInvalid={Boolean(error)}>
+                    <FormControl.Label>Email</FormControl.Label>
+                    <Input
+                      placeholder="Ex: Zahid@gmail.com"
+                      keyboardType="email-address"
+                      autoComplete="email"
+                      autoCapitalize="none"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                    <FormControl.ErrorMessage>
+                      {error?.message}
+                    </FormControl.ErrorMessage>
+                  </FormControl>
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="pass"
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <FormControl isInvalid={Boolean(error)}>
+                    <FormControl.Label>Kata Sandi</FormControl.Label>
+                    <Input
+                      secureTextEntry={!isPasswordVisible}
+                      placeholder="Minimal 6 Karakter"
+                      value={value}
+                      onChangeText={onChange}
+                      InputRightElement={
+                        <IconButton
+                          p={1}
+                          mr={1}
+                          icon={
+                            <Icon
+                              as={MaterialCommunityIcons}
+                              name={isPasswordVisible ? 'eye' : 'eye-off'}
+                            />
+                          }
+                          onPress={() => setIsPasswordVisible(v => !v)}
+                        />
+                      }
+                    />
+                    <FormControl.ErrorMessage>
+                      {error?.message}
+                    </FormControl.ErrorMessage>
+                  </FormControl>
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="repass"
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <FormControl isInvalid={Boolean(error)}>
+                    <FormControl.Label>Ulangi Kata Sandi</FormControl.Label>
+                    <Input
+                      secureTextEntry={!isPasswordConfirmationVisible}
+                      placeholder="Masukkan kembali kata sandi"
+                      value={value}
+                      onChangeText={onChange}
+                      InputRightElement={
+                        <IconButton
+                          p={1}
+                          mr={1}
+                          icon={
+                            <Icon
+                              as={MaterialCommunityIcons}
+                              name={
+                                isPasswordConfirmationVisible
+                                  ? 'eye'
+                                  : 'eye-off'
+                              }
+                            />
+                          }
+                          onPress={() =>
+                            setIsPasswordConfirmationVisible(v => !v)
+                          }
+                        />
+                      }
+                    />
+                    <FormControl.ErrorMessage>
+                      {error?.message}
+                    </FormControl.ErrorMessage>
+                  </FormControl>
+                )}
+              />
+            </Stack>
           </Stack>
-          <Stack space={2}>
-            <Controller
-              control={control}
-              name="nama"
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => (
-                <FormControl isInvalid={Boolean(error)}>
-                  <FormControl.Label>Nama</FormControl.Label>
-                  <Input
-                    placeholder="Ex: Muhammad Zahid Masruri"
-                    autoComplete="name"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                  <FormControl.ErrorMessage>
-                    {error?.message}
-                  </FormControl.ErrorMessage>
-                </FormControl>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="email"
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => (
-                <FormControl isInvalid={Boolean(error)}>
-                  <FormControl.Label>Email</FormControl.Label>
-                  <Input
-                    placeholder="Ex: Zahid@gmail.com"
-                    keyboardType="email-address"
-                    autoComplete="email"
-                    autoCapitalize="none"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                  <FormControl.ErrorMessage>
-                    {error?.message}
-                  </FormControl.ErrorMessage>
-                </FormControl>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="pass"
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => (
-                <FormControl isInvalid={Boolean(error)}>
-                  <FormControl.Label>Kata Sandi</FormControl.Label>
-                  <Input
-                    secureTextEntry={!isPasswordVisible}
-                    placeholder="Minimal 6 Karakter"
-                    value={value}
-                    onChangeText={onChange}
-                    InputRightElement={
-                      <IconButton
-                        p={1}
-                        mr={1}
-                        icon={
-                          <Icon
-                            as={MaterialCommunityIcons}
-                            name={isPasswordVisible ? 'eye' : 'eye-off'}
-                          />
-                        }
-                        onPress={() => setIsPasswordVisible(v => !v)}
-                      />
-                    }
-                  />
-                  <FormControl.ErrorMessage>
-                    {error?.message}
-                  </FormControl.ErrorMessage>
-                </FormControl>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="repass"
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => (
-                <FormControl isInvalid={Boolean(error)}>
-                  <FormControl.Label>Ulangi Kata Sandi</FormControl.Label>
-                  <Input
-                    secureTextEntry={!isPasswordConfirmationVisible}
-                    placeholder="Masukkan kembali kata sandi"
-                    value={value}
-                    onChangeText={onChange}
-                    InputRightElement={
-                      <IconButton
-                        p={1}
-                        mr={1}
-                        icon={
-                          <Icon
-                            as={MaterialCommunityIcons}
-                            name={
-                              isPasswordConfirmationVisible ? 'eye' : 'eye-off'
-                            }
-                          />
-                        }
-                        onPress={() =>
-                          setIsPasswordConfirmationVisible(v => !v)
-                        }
-                      />
-                    }
-                  />
-                  <FormControl.ErrorMessage>
-                    {error?.message}
-                  </FormControl.ErrorMessage>
-                </FormControl>
-              )}
-            />
-          </Stack>
-        </Stack>
-        <Flex flex={1} p={5} justifyContent="flex-end">
-          <Button onPress={onSubmit} isLoading={register.isLoading}>
-            Daftar
-          </Button>
-          <HStack alignItems={'center'} alignSelf="center">
-            <Text>Sudah punya akun ?</Text>
-            <Button
-              variant={'link'}
-              onPress={() => navigation.navigate('LoginScreen')}>
-              Masuk disini
+          <Flex flex={1} p={5} justifyContent="flex-end">
+            <Button onPress={onSubmit} isLoading={register.isLoading}>
+              Daftar
             </Button>
-          </HStack>
+            <HStack alignItems={'center'} alignSelf="center">
+              <Text>Sudah punya akun ?</Text>
+              <Button
+                variant={'link'}
+                onPress={() => navigation.navigate('LoginScreen')}>
+                Masuk disini
+              </Button>
+            </HStack>
+          </Flex>
         </Flex>
-      </Flex>
-    </ScrollView>
+      </ScrollView>
+    </Box>
   );
 };
 

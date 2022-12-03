@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import {
+  Box,
   Button,
   Flex,
   FormControl,
@@ -49,8 +50,7 @@ const LoginScreen = (props: LoginScreenProps) => {
     mutationFn: authLoginMutation,
     onSuccess(data, variables) {
       const token = data.data.data?.token ?? '';
-      const { email, password } = variables;
-      storeCredential(email, password, token);
+      storeCredential(token);
     },
     onError(error: AxiosResponse<ApiResponse<any>>) {
       toast.show({
@@ -74,87 +74,89 @@ const LoginScreen = (props: LoginScreenProps) => {
   });
 
   return (
-    <ScrollView
-      flex={1}
-      _light={{
-        bg: 'white',
-      }}
-      _dark={{
-        bg: 'dark.50',
-      }}>
-      <Flex flex={1}>
-        <Stack p={5} space={6}>
-          <Stack space={2}>
-            <Heading>Masuk</Heading>
-            <Text>
-              Masukkan email dan kata sandi untuk mulai melengkapi data aset
-              wakaf
-            </Text>
-          </Stack>
-          <Stack space={2}>
-            <Controller
-              control={control}
-              name="email"
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => (
-                <FormControl isInvalid={Boolean(error)}>
-                  <FormControl.Label>Email</FormControl.Label>
-                  <Input
-                    autoCapitalize="none"
-                    placeholder="Ex: Zahid@gmail.com"
-                    keyboardType="email-address"
-                    autoComplete="email"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                  <FormControl.ErrorMessage>
-                    {error?.message}
-                  </FormControl.ErrorMessage>
-                </FormControl>
-              )}
-            />
+    <Box safeArea>
+      <ScrollView
+        flex={1}
+        _light={{
+          bg: 'white',
+        }}
+        _dark={{
+          bg: 'dark.50',
+        }}>
+        <Flex flex={1}>
+          <Stack p={5} space={6}>
+            <Stack space={2}>
+              <Heading>Masuk</Heading>
+              <Text>
+                Masukkan email dan kata sandi untuk mulai melengkapi data aset
+                wakaf
+              </Text>
+            </Stack>
+            <Stack space={2}>
+              <Controller
+                control={control}
+                name="email"
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <FormControl isInvalid={Boolean(error)}>
+                    <FormControl.Label>Email</FormControl.Label>
+                    <Input
+                      autoCapitalize="none"
+                      placeholder="Ex: Zahid@gmail.com"
+                      keyboardType="email-address"
+                      autoComplete="email"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                    <FormControl.ErrorMessage>
+                      {error?.message}
+                    </FormControl.ErrorMessage>
+                  </FormControl>
+                )}
+              />
 
-            <Controller
-              control={control}
-              name="pass"
-              render={({
-                field: { value, onChange },
-                fieldState: { error },
-              }) => (
-                <FormControl isInvalid={Boolean(error)}>
-                  <FormControl.Label>Kata Sandi</FormControl.Label>
-                  <Input
-                    placeholder="Minimal 6 Karakter"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                  <FormControl.ErrorMessage>
-                    {error?.message}
-                  </FormControl.ErrorMessage>
-                </FormControl>
-              )}
-            />
+              <Controller
+                control={control}
+                name="pass"
+                render={({
+                  field: { value, onChange },
+                  fieldState: { error },
+                }) => (
+                  <FormControl isInvalid={Boolean(error)}>
+                    <FormControl.Label>Kata Sandi</FormControl.Label>
+                    <Input
+                      placeholder="Minimal 6 Karakter"
+                      value={value}
+                      onChangeText={onChange}
+                    />
+                    <FormControl.ErrorMessage>
+                      {error?.message}
+                    </FormControl.ErrorMessage>
+                  </FormControl>
+                )}
+              />
+            </Stack>
           </Stack>
-        </Stack>
-        <Flex flex={1} p={5} justifyContent="flex-end">
-          <Button
-            onPress={onSubmit}
-            isLoading={login.isLoading || isAuthLoading}>
-            Masuk
-          </Button>
-          <HStack alignItems={'center'} alignSelf="center">
-            <Text>Belum punya akun ?</Text>
+          <Flex flex={1} p={5} justifyContent="flex-end">
             <Button
-              variant={'link'}
-              onPress={() => navigation.navigate('RegisterScreen')}>
-              Daftar disini
+              onPress={onSubmit}
+              isLoading={login.isLoading || isAuthLoading}>
+              Masuk
             </Button>
-          </HStack>
+            <HStack alignItems={'center'} alignSelf="center">
+              <Text>Belum punya akun ?</Text>
+              <Button
+                variant={'link'}
+                onPress={() => navigation.navigate('RegisterScreen')}>
+                Daftar disini
+              </Button>
+            </HStack>
+          </Flex>
         </Flex>
-      </Flex>
-    </ScrollView>
+      </ScrollView>
+    </Box>
   );
 };
 

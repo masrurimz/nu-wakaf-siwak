@@ -1,4 +1,3 @@
-// import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Box,
   PresenceTransition,
@@ -7,44 +6,46 @@ import {
   useColorModeValue,
   VStack,
 } from 'native-base';
-import React, { useCallback, useEffect } from 'react';
-
+import React, { useEffect } from 'react';
 import LogoNU from '@src/app/assets/images/LogoNU.svg';
 import LogoSiwak from '@src/app/assets/images/LogoSiwak.svg';
 import { theme } from '../../app/config';
-// import { useAppDispatch } from '../../common/hooks';
-// import { RootStackParamList } from '../../app/navigation';
-// import { useLoginMutation } from '../../app/services';
-// import { restoreCredential, storeCredential } from './authSlice';
+import { useAuthStore } from './auth.store';
+import { useQuery } from '@tanstack/react-query';
+import { accountKeys } from '../../app/services/api/account/accountKeys.api.service';
+import { accountProfileQuery } from '../../app/services/api/account/accountProfile.api.service';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParams } from '../../app/navigation';
 
-// type ScreenProps = NativeStackScreenProps<RootStackParamList, 'SplashScreen'>;
+type ScreenProps = NativeStackScreenProps<RootStackParams, 'SplashScreen'>;
+type SplashScreenProsp = ScreenProps;
 
-const SplashScreen = () => {
+const SplashScreen = (props: SplashScreenProsp) => {
+  const { navigation } = props;
+
+  const clearCredential = useAuthStore(state => state.clear);
+  const storeToken = useAuthStore(state => state.store);
+  const restoreToken = useAuthStore(state => state.restore);
+  const profile = useQuery({
+    queryKey: accountKeys.getProfile,
+    queryFn: accountProfileQuery,
+    enabled: false,
+  });
   useEffect(() => {
     const validateCredentials = async () => {
-      // try {
-      //   const { email, passwordHashed } = await dispatch(
-      //     restoreCredential(),
-      //   ).unwrap();
-      //   if (!email || !passwordHashed) {
-      //     return;
-      //   }
-      //   const resultLogin = await login({
-      //     pass: passwordHashed,
-      //     user: email,
-      //   }).unwrap();
-      //   dispatch(
-      //     storeCredential({
-      //       token: resultLogin.data.token,
-      //       email,
-      //       passwordHashed,
-      //     }),
-      //   );
-      //   return true;
-      // } catch (error) {
-      //   console.error(error);
-      //   throw error;
-      // }
+      const token = await restoreToken();
+      if (!token) {
+        return false;
+      }
+
+      const res = await profile.refetch();
+      const email = res.data?.data.data?.email;
+      if (!email) {
+        return false;
+      }
+
+      storeToken(token);
+      return true;
     };
 
     let timerRef: NodeJS.Timeout;
@@ -63,19 +64,21 @@ const SplashScreen = () => {
           animateSplashScreen(),
         ]);
 
-        // if (!isValid) {
-        //   navigation.navigate('WelcomeScreen');
-        // }
+        if (!isValid) {
+          clearCredential();
+          navigation.navigate('WelcomeScreen');
+        }
       } catch (error) {
-        // navigation.navigate('WelcomeScreen');
+        navigation.navigate('WelcomeScreen');
       }
     })();
 
     return () => clearTimeout(timerRef);
-  }, []);
+  }, [clearCredential, navigation, profile, restoreToken, storeToken]);
 
   return (
     <VStack
+      safeArea
       flex={1}
       p={'5'}
       alignItems={'center'}
