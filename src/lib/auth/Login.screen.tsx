@@ -3,21 +3,16 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import {
-  Alert,
-  Box,
   Button,
-  CloseIcon,
   Flex,
   FormControl,
   Heading,
   HStack,
-  IconButton,
   Input,
   ScrollView,
   Stack,
   Text,
   useToast,
-  VStack,
 } from 'native-base';
 import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -25,6 +20,7 @@ import { sha1 } from 'react-native-sha1';
 import * as yup from 'yup';
 import { RootStackParams } from '../../app/navigation';
 import { authKeys, authLoginMutation } from '../../app/services';
+import { ToastAlert } from '../../common/components';
 import { ApiResponse } from '../../common/types/apiResponse';
 import { useAuthStore } from './auth.store';
 
@@ -38,7 +34,8 @@ type LoginUser = yup.InferType<typeof loginUserSchema>;
 type ScreenProps = NativeStackScreenProps<RootStackParams, 'LoginScreen'>;
 type LoginScreenProps = ScreenProps;
 
-const LoginScreen = (_props: LoginScreenProps) => {
+const LoginScreen = (props: LoginScreenProps) => {
+  const { navigation } = props;
   const toast = useToast();
 
   const { control, handleSubmit } = useForm<LoginUser>({
@@ -58,43 +55,12 @@ const LoginScreen = (_props: LoginScreenProps) => {
     onError(error: AxiosResponse<ApiResponse<any>>) {
       toast.show({
         render: () => (
-          <Alert
-            maxW="400"
+          <ToastAlert
+            title="Gagal Masuk"
+            description={error.data.msg}
             status="error"
             colorScheme="error"
-            variant="top-accent">
-            <VStack space={2} flexShrink={1} w="100%">
-              <HStack
-                flexShrink={1}
-                space={2}
-                alignItems="center"
-                justifyContent="space-between">
-                <HStack flexShrink={1} space={2} alignItems="center">
-                  <Alert.Icon />
-                  <Text fontSize="md" fontWeight="medium" color="coolGray.800">
-                    Gagal Masuk
-                  </Text>
-                </HStack>
-                <IconButton
-                  variant="unstyled"
-                  _focus={{
-                    borderWidth: 0,
-                  }}
-                  icon={<CloseIcon size="3" />}
-                  _icon={{
-                    color: 'coolGray.600',
-                  }}
-                />
-              </HStack>
-              <Box
-                pl="6"
-                _text={{
-                  color: 'coolGray.600',
-                }}>
-                {error.data.msg}
-              </Box>
-            </VStack>
-          </Alert>
+          />
         ),
       });
     },
@@ -180,7 +146,11 @@ const LoginScreen = (_props: LoginScreenProps) => {
           </Button>
           <HStack alignItems={'center'} alignSelf="center">
             <Text>Belum punya akun ?</Text>
-            <Button variant={'link'}>Daftar disini</Button>
+            <Button
+              variant={'link'}
+              onPress={() => navigation.navigate('RegisterScreen')}>
+              Daftar disini
+            </Button>
           </HStack>
         </Flex>
       </Flex>
