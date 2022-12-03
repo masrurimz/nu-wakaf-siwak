@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
+  Box,
   Button,
   Heading,
   HStack,
@@ -25,7 +26,7 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
   const { navigation } = props;
 
   return (
-    <>
+    <Box safeArea>
       <StatusBar
         backgroundColor={useColorModeValue('white', theme.colors.dark[50])}
         barStyle={useColorModeValue('dark-content', 'light-content')}
@@ -103,7 +104,7 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
           </VStack>
         </KeyboardAvoidingView>
       </ScrollView>
-    </>
+    </Box>
   );
 };
 

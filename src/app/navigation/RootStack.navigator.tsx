@@ -32,7 +32,7 @@ export const RootStackNavigator = () => {
 
   return (
     <RootStack.Navigator
-      initialRouteName="WelcomeScreen"
+      initialRouteName="SplashScreen"
       screenOptions={{
         headerShown: true,
         headerStyle: {
@@ -46,6 +46,7 @@ export const RootStackNavigator = () => {
           headerShown: false,
         }}>
         <RootStack.Screen name="SplashScreen" component={SplashScreen} />
+        {/* @ts-ignore */}
         <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
       </RootStack.Group>
       <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />

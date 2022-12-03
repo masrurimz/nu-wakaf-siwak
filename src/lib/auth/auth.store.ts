@@ -7,12 +7,9 @@ interface AuthState {
   isLoading: boolean;
   isLoggedIn: boolean;
   token: string;
-  store: (
-    email: string,
-    passwordHashed: string,
-    token: string,
-  ) => Promise<string>;
-  restore: () => Promise<void>;
+  store: (token: string) => Promise<string>;
+  restore: () => Promise<string>;
+  clear: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,7 +19,7 @@ export const useAuthStore = create<AuthState>()(
       isLoading: false,
       isLoggedIn: false,
       token: '',
-      async store(_email, _passwordHashed, token) {
+      async store(token) {
         set({ isLoading: true });
         await EncryptedStorage.setItem('token', token);
 
@@ -30,14 +27,20 @@ export const useAuthStore = create<AuthState>()(
 
         return token;
       },
-      restore: async () => {
+      async restore() {
         set({ isLoading: true });
-        const token = await EncryptedStorage.getItem('token');
+        const token = (await EncryptedStorage.getItem('token')) ?? '';
 
         set({
           isLoading: false,
-          token: token ?? '',
+          token: token,
         });
+
+        return token;
+      },
+      async clear() {
+        set({ isLoading: false, token: '', isLoggedIn: false });
+        await EncryptedStorage.removeItem('token');
       },
     })),
   ),
