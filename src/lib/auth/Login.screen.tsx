@@ -1,20 +1,32 @@
-import React from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosResponse } from 'axios';
 import {
+  Alert,
+  Box,
   Button,
+  CloseIcon,
   Flex,
   FormControl,
   Heading,
   HStack,
+  IconButton,
   Input,
   ScrollView,
   Stack,
   Text,
   useToast,
+  VStack,
 } from 'native-base';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { sha1 } from 'react-native-sha1';
+import React from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { sha1 } from 'react-native-sha1';
+import * as yup from 'yup';
+import { RootStackParams } from '../../app/navigation';
+import { authKeys, authLoginMutation } from '../../app/services';
+import { ApiResponse } from '../../common/types/apiResponse';
+import { useAuthStore } from './auth.store';
 
 const loginUserSchema = yup.object({
   email: yup.string().required().email().label('Email'),
@@ -23,44 +35,76 @@ const loginUserSchema = yup.object({
 
 type LoginUser = yup.InferType<typeof loginUserSchema>;
 
-// type ScreenProps = NativeStackScreenProps<RootStackParamList, 'LoginScreen'>;
+type ScreenProps = NativeStackScreenProps<RootStackParams, 'LoginScreen'>;
+type LoginScreenProps = ScreenProps;
 
-const LoginScreen = () => {
+const LoginScreen = (_props: LoginScreenProps) => {
   const toast = useToast();
 
   const { control, handleSubmit } = useForm<LoginUser>({
     resolver: yupResolver(loginUserSchema),
   });
 
+  const storeCredential = useAuthStore(state => state.store);
+  const isAuthLoading = useAuthStore(state => state.isLoading);
+  const login = useMutation({
+    mutationKey: authKeys.authLogin,
+    mutationFn: authLoginMutation,
+    onSuccess(data, variables) {
+      const token = data.data.data?.token ?? '';
+      const { email, password } = variables;
+      storeCredential(email, password, token);
+    },
+    onError(error: AxiosResponse<ApiResponse<any>>) {
+      toast.show({
+        render: () => (
+          <Alert
+            maxW="400"
+            status="error"
+            colorScheme="error"
+            variant="top-accent">
+            <VStack space={2} flexShrink={1} w="100%">
+              <HStack
+                flexShrink={1}
+                space={2}
+                alignItems="center"
+                justifyContent="space-between">
+                <HStack flexShrink={1} space={2} alignItems="center">
+                  <Alert.Icon />
+                  <Text fontSize="md" fontWeight="medium" color="coolGray.800">
+                    Gagal Masuk
+                  </Text>
+                </HStack>
+                <IconButton
+                  variant="unstyled"
+                  _focus={{
+                    borderWidth: 0,
+                  }}
+                  icon={<CloseIcon size="3" />}
+                  _icon={{
+                    color: 'coolGray.600',
+                  }}
+                />
+              </HStack>
+              <Box
+                pl="6"
+                _text={{
+                  color: 'coolGray.600',
+                }}>
+                {error.data.msg}
+              </Box>
+            </VStack>
+          </Alert>
+        ),
+      });
+    },
+  });
   const onSubmit = handleSubmit(async data => {
-    try {
-      const passwordHashed = await sha1(data.pass);
-
-      // const resultLogin = await login({
-      //   user: data.email,
-      //   pass: passwordHashed,
-      // }).unwrap();
-
-      // if (resultLogin.id !== '00') {
-      //   toast.show({
-      //     title: resultLogin.msg,
-      //     bg: 'danger.600',
-      //     w: 350,
-      //   });
-
-      //   return;
-      // }
-
-      // dispatch(
-      //   storeCredential({
-      //     token: resultLogin.data.token,
-      //     email: data.email,
-      //     passwordHashed,
-      //   }),
-      // );
-    } catch (error) {
-      console.error(error);
-    }
+    const passwordHashed = await sha1(data.pass);
+    login.mutate({
+      email: data.email,
+      password: passwordHashed,
+    });
   });
 
   return (
@@ -129,16 +173,14 @@ const LoginScreen = () => {
           </Stack>
         </Stack>
         <Flex flex={1} p={5} justifyContent="flex-end">
-          <Button onPress={onSubmit} isLoading={false}>
+          <Button
+            onPress={onSubmit}
+            isLoading={login.isLoading || isAuthLoading}>
             Masuk
           </Button>
           <HStack alignItems={'center'} alignSelf="center">
             <Text>Belum punya akun ?</Text>
-            <Button
-              variant={'link'}
-              onPress={() => navigation.navigate('RegisterScreen')}>
-              Daftar disini
-            </Button>
+            <Button variant={'link'}>Daftar disini</Button>
           </HStack>
         </Flex>
       </Flex>

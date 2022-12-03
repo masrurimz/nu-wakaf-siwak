@@ -10,6 +10,12 @@ import { AppNavigator } from './src/app/navigation';
 import { queryClient } from './src/app/services';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
+if (__DEV__) {
+  import('react-query-native-devtools').then(({ addPlugin }) => {
+    addPlugin({ queryClient });
+  });
+}
+
 const App = () => {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
