@@ -40,6 +40,12 @@ export const useAuthStore = create<AuthState>()(
       },
       async clear() {
         set({ isLoading: false, token: '', isLoggedIn: false });
+
+        const token = await EncryptedStorage.getItem('token');
+        if (!token) {
+          return;
+        }
+
         await EncryptedStorage.removeItem('token');
       },
     })),
