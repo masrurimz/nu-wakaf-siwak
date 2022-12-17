@@ -11,11 +11,9 @@ export const wakafListQuery = (params: WakafListParams) => {
 
   length && data.append('length', String(length));
   search && data.append('search', search);
-  start && data.append('start', String(start));
+  typeof start !== 'undefined' && data.append('start', String(start));
 
   data.append('noicon', String(1));
-
-  console.log({ search });
 
   return axiosClient.post<WakafListResponse>(
     '/ws/wakaf/getDataTableWakaf',

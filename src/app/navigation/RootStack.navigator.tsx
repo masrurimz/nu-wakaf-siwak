@@ -49,12 +49,15 @@ export const RootStackNavigator = () => {
         header: RootStackHeader,
       }}>
       {isLoggedIn ? (
-        <>
+        <RootStack.Group
+          screenOptions={{
+            headerShown: false,
+          }}>
           <RootStack.Screen
             name="WakafListScreen"
             component={WakafListScreen}
           />
-        </>
+        </RootStack.Group>
       ) : (
         <>
           <RootStack.Group

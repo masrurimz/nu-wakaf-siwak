@@ -5,16 +5,18 @@ import { useWakafStore } from '../wakaf.store';
 export const useWakafListScreen = () => {
   const searchQuery = useWakafStore(state => state.searchQuery);
 
-  const wakafList = useInfiniteQuery({
+  const infiniteQuery = useInfiniteQuery({
     queryKey: [...wakafKeys.wakafList, searchQuery],
-    queryFn: ({ queryKey }) =>
+    queryFn: ctx =>
       wakafListQuery({
-        search: String(queryKey[2] ?? ''),
+        search: String(ctx.queryKey[2] ?? ''),
+        length: 10,
+        start: ctx.pageParam ?? 0,
       }),
   });
 
   return {
-    wakafList,
+    infiniteQuery,
     searchQuery,
   };
 };

@@ -1,23 +1,29 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
+  Box,
   Fab,
   FlatList,
   Flex,
+  Heading,
   Icon,
   StatusBar,
   useColorModeValue,
+  VStack,
 } from 'native-base';
 import React, { useCallback } from 'react';
+import { ListRenderItem } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { theme } from '../../../app/config';
 import { RootStackParams } from '../../../app/navigation';
+import { Wakaf } from '../../../common/types/wakaf';
 import { useWakafListScreen as useWakafListScreenIJ } from './useWakafListScreen';
+import WakafListEmpty from './WakafListEmpty';
 import WakafListHeader from './WakafListHeader/WakafListHeader';
 import AsetWakafListItem from './WakafListItem';
 
 type ScreenProps = NativeStackScreenProps<RootStackParams, 'WakafListScreen'>;
 interface WakafListScreenProps extends ScreenProps {
-  useWakafListScreen: typeof useWakafListScreenIJ;
+  useWakafListScreen?: typeof useWakafListScreenIJ;
 }
 
 const WakafListScreen = (props: WakafListScreenProps) => {
@@ -27,13 +33,14 @@ const WakafListScreen = (props: WakafListScreenProps) => {
     useWakafListScreen = useWakafListScreenIJ,
   } = props;
 
-  const { searchQuery, setSearchQuery, wakafList } = useWakafListScreen();
-
-  // TODO: Add skeleton loader
+  const { infiniteQuery, searchQuery } = useWakafListScreen();
+  const data =
+    infiniteQuery.data?.pages.map(page => page.data.data.data ?? []).flat() ??
+    [];
 
   const openFormWakaf = () => {};
 
-  const renderItem = useCallback(({ item }) => {
+  const renderItem: ListRenderItem<Wakaf> = useCallback(({ item }) => {
     const onPress = () => {
       // dispatch(
       //   setSelectedWakafAset({
@@ -81,10 +88,16 @@ const WakafListScreen = (props: WakafListScreenProps) => {
         _contentContainerStyle={{
           height: '100%',
         }}
-        data={[]}
-        // keyExtractor={({ DT_RowId }) => DT_RowId}
+        data={data ?? []}
+        keyExtractor={({ DT_RowId }) => DT_RowId}
         renderItem={renderItem}
-        ListHeaderComponent={WakafListHeader}
+        ListHeaderComponent={
+          <WakafListHeader
+            isQueryLoading={infiniteQuery.isLoading}
+            onPressSearch={infiniteQuery.refetch}
+          />
+        }
+        ListEmptyComponent={<WakafListEmpty searchQuery={searchQuery} />}
       />
       <Fab
         borderRadius={15}

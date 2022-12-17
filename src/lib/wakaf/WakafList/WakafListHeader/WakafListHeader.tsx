@@ -21,12 +21,17 @@ import {
 } from './useWakafListHeader';
 
 interface WakafListHeaderProps {
-  useWakafListHeader: UseWakafListHeader;
-  onSearch: (query: string) => void;
+  useWakafListHeader?: UseWakafListHeader;
+  isQueryLoading: boolean;
+  onPressSearch: () => void;
 }
 
 const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
-  const { onSearch, useWakafListHeader = useWakafListHeaderIJ } = props;
+  const {
+    onPressSearch,
+    isQueryLoading,
+    useWakafListHeader = useWakafListHeaderIJ,
+  } = props;
   const { openWakafForm, nameFormatted, nameInitial } = useWakafListHeader();
 
   const [isSearchMode, setIsSearchMode] = useState(false);
@@ -61,19 +66,22 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
       m={2}
       placeholder="Masukkan pencarian"
       InputRightElement={
-        <IconButton
+        <Button
           bg="secondary.100"
           py={1}
           px={3}
           m={1.5}
           rounded="full"
           variant="solid"
-          onPress={() => onSearch(searchQuery)}
-          _icon={{
-            as: MaterialCommunityIcons,
-            name: 'magnify',
-            color: 'secondary.600',
-          }}
+          onPress={onPressSearch}
+          leftIcon={
+            <Icon
+              as={MaterialCommunityIcons}
+              name="magnify"
+              color="secondary.600"
+            />
+          }
+          isLoading={isQueryLoading}
         />
       }
       InputLeftElement={
@@ -101,6 +109,7 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
     />
   );
 
+  // TODO Add skeleteon loder
   const render = () => (
     <Box _light={{ bg: 'primary.50' }} _dark={{ bg: 'primary.900' }}>
       <Stack space={3} px="5" pb="5">
