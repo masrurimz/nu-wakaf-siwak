@@ -26,7 +26,14 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
   const { navigation } = props;
 
   return (
-    <Box safeArea flex={1}>
+    <Box
+      flex={1}
+      _light={{
+        bg: 'white',
+      }}
+      _dark={{
+        bg: 'dark.50',
+      }}>
       <StatusBar
         backgroundColor={useColorModeValue('white', theme.colors.dark[50])}
         barStyle={useColorModeValue('dark-content', 'light-content')}
@@ -36,13 +43,7 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
         h={{
           base: '100%',
         }}
-        flex={1}
-        _light={{
-          bg: 'white',
-        }}
-        _dark={{
-          bg: 'dark.50',
-        }}>
+        flex={1}>
         <KeyboardAvoidingView h={{ base: '100%' }}>
           <VStack p={5} space={6}>
             <VStack space={3}>

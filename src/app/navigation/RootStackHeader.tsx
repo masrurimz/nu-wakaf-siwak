@@ -5,7 +5,7 @@ import React from 'react';
 
 const RootStackHeader = (props: NativeStackHeaderProps) => {
   return (
-    <HStack bg="white">
+    <HStack safeAreaTop bg="white">
       {props.navigation.canGoBack() ? (
         <IconButton
           icon={
