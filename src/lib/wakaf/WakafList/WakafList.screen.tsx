@@ -42,7 +42,7 @@ const WakafListScreen = ({ navigation }: ScreenProps) => {
   }, []);
 
   return (
-    <Flex flex={1} bg="primary.50">
+    <Flex flex={1} bg="primary.50" safeAreaTop safeAreaX>
       <StatusBar
         backgroundColor={useColorModeValue(
           theme.colors.primary[50],
@@ -57,8 +57,8 @@ const WakafListScreen = ({ navigation }: ScreenProps) => {
         _dark={{
           bg: 'dark.50',
         }}
-        data={listWakaf?.data?.data}
-        keyExtractor={({ DT_RowId }) => DT_RowId}
+        data={[]}
+        // keyExtractor={({ DT_RowId }) => DT_RowId}
         renderItem={renderItem}
         ListHeaderComponent={WakafListHeader}
       />

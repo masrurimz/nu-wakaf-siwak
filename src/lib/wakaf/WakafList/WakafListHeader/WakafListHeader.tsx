@@ -21,16 +21,15 @@ import {
 
 interface WakafListHeaderProps {
   useWakafListHeader: UseWakafListHeader;
+  onSearch: (query: string) => void;
 }
 
 const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
-  const { useWakafListHeader = useWakafListHeaderIJ } = props;
+  const { onSearch, useWakafListHeader = useWakafListHeaderIJ } = props;
+  const { openWakafForm, nameFormatted, nameInitial } = useWakafListHeader();
 
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
-  const { openWakafForm, nameFormatted, nameInitial, handlePressSearch } =
-    useWakafListHeader();
 
   const renderListHeader = () => (
     <HStack px={5} alignItems="center" justifyContent="space-between">
@@ -63,7 +62,7 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
           m={1.5}
           rounded="full"
           variant="solid"
-          onPress={() => handlePressSearch(searchQuery)}
+          onPress={() => onSearch(searchQuery)}
           _icon={{
             as: MaterialCommunityIcons,
             name: 'magnify',
@@ -98,7 +97,7 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
 
   const render = () => (
     <Box _light={{ bg: 'primary.50' }} _dark={{ bg: 'primary.900' }}>
-      <Stack space={3} p="5">
+      <Stack space={3} px="5" pb="5">
         <HStack alignItems="center" justifyContent="space-between">
           <Stack>
             <Text fontWeight="medium" fontSize={12} color="text.400">

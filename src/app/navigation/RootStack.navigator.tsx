@@ -9,17 +9,24 @@ import {
 import { theme } from '../config';
 import { useColorModeValue } from 'native-base';
 import RootStackHeader from './RootStackHeader';
+import { useAuthStore } from '../../lib/auth/auth.store';
+import { WakafListScreen } from '../../lib/wakaf';
 
 export type RootStackParams = {
   SplashScreen: undefined;
   WelcomeScreen: undefined;
   RegisterScreen: undefined;
   LoginScreen: undefined;
+
+  WakafListScreen: undefined;
+  WakafFormScreen: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
 
 export const RootStackNavigator = () => {
+  const isLoggedIn = useAuthStore(state => state.isLoggedIn);
+
   const rootStackHeaderBgColor = useColorModeValue(
     theme.colors.white,
     theme.colors.dark[50],
@@ -41,16 +48,27 @@ export const RootStackNavigator = () => {
         headerTintColor: rootStackHeaderTintColor,
         header: RootStackHeader,
       }}>
-      <RootStack.Group
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <RootStack.Screen name="SplashScreen" component={SplashScreen} />
-        {/* @ts-ignore */}
-        <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-      </RootStack.Group>
-      <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
-      <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+      {isLoggedIn ? (
+        <>
+          <RootStack.Screen
+            name="WakafListScreen"
+            component={WakafListScreen}
+          />
+        </>
+      ) : (
+        <>
+          <RootStack.Group
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <RootStack.Screen name="SplashScreen" component={SplashScreen} />
+            {/* @ts-ignore */}
+            <RootStack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+          </RootStack.Group>
+          <RootStack.Screen name="RegisterScreen" component={RegisterScreen} />
+          <RootStack.Screen name="LoginScreen" component={LoginScreen} />
+        </>
+      )}
     </RootStack.Navigator>
   );
 };
