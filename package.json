@@ -7,6 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start --reset-cache",
     "test": "jest",
+    "test:update": "jest --updateSnapshot",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "prestart": "sb-rn-get-stories",
     "storybook": "start-storybook -p 6006",
@@ -59,6 +60,7 @@
     "@storybook/react-native": "^6.0.1-beta.10",
     "@storybook/react-native-server": "^5.3.23",
     "@storybook/testing-library": "^0.0.13",
+    "@testing-library/react-native": "^11.5.0",
     "@tsconfig/react-native": "^2.0.2",
     "@types/babel__core": "^7.1.20",
     "@types/eslint": "^8.4.10",
@@ -90,6 +92,9 @@
   },
   "jest": {
     "preset": "react-native",
+    "setupFilesAfterEnv": [
+      "@testing-library/jest-native/extend-expect"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -97,6 +102,9 @@
       "jsx",
       "json",
       "node"
-    ]
+    ],
+    "moduleNameMapper": {
+      "\\.svg": "<rootDir>/__mocks__/svgMock.ts"
+    }
   }
 }
