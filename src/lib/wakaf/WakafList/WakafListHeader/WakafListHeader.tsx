@@ -1,4 +1,3 @@
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   Avatar,
   Box,
@@ -9,11 +8,13 @@ import {
   Icon,
   IconButton,
   Input,
-  PresenceTransition,
   Stack,
   Text,
 } from 'native-base';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useDebounce } from '../../../../common/hooks';
+import { useWakafStore } from '../../wakaf.store';
 import {
   UseWakafListHeader,
   useWakafListHeader as useWakafListHeaderIJ,
@@ -30,6 +31,11 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
 
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const searchQueryDebounced = useDebounce(searchQuery, 1000);
+  const setSearchQueryStore = useWakafStore(state => state.setSearchQuery);
+  useEffect(() => {
+    setSearchQueryStore(String(searchQueryDebounced));
+  }, [searchQueryDebounced, setSearchQueryStore]);
 
   const renderListHeader = () => (
     <HStack px={5} alignItems="center" justifyContent="space-between">

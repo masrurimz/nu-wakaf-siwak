@@ -1,4 +1,4 @@
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import {
   Fab,
   FlatList,
@@ -8,13 +8,27 @@ import {
   useColorModeValue,
 } from 'native-base';
 import React, { useCallback } from 'react';
-import { ListRenderItem } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { theme } from '../../../app/config';
-
-import AsetWakafListItem from './WakafListItem';
+import { RootStackParams } from '../../../app/navigation';
+import { useWakafListScreen as useWakafListScreenIJ } from './useWakafListScreen';
 import WakafListHeader from './WakafListHeader/WakafListHeader';
+import AsetWakafListItem from './WakafListItem';
 
-const WakafListScreen = ({ navigation }: ScreenProps) => {
+type ScreenProps = NativeStackScreenProps<RootStackParams, 'WakafListScreen'>;
+interface WakafListScreenProps extends ScreenProps {
+  useWakafListScreen: typeof useWakafListScreenIJ;
+}
+
+const WakafListScreen = (props: WakafListScreenProps) => {
+  const {
+    navigation,
+    route,
+    useWakafListScreen = useWakafListScreenIJ,
+  } = props;
+
+  const { searchQuery, setSearchQuery, wakafList } = useWakafListScreen();
+
   // TODO: Add skeleton loader
 
   const openFormWakaf = () => {};
@@ -52,10 +66,20 @@ const WakafListScreen = ({ navigation }: ScreenProps) => {
       />
       <FlatList
         _light={{
-          bg: 'white',
+          bg: 'primary.50',
+          _contentContainerStyle: {
+            bg: 'white',
+          },
         }}
         _dark={{
-          bg: 'dark.50',
+          bg: 'primary.900',
+          _contentContainerStyle: {
+            bg: 'dark.50',
+          },
+        }}
+        // eslint-disable-next-line react-native/no-inline-styles
+        _contentContainerStyle={{
+          height: '100%',
         }}
         data={[]}
         // keyExtractor={({ DT_RowId }) => DT_RowId}

@@ -13,9 +13,10 @@ export const useWakafListHeader = () => {
   const profile = useQuery({
     queryKey: accountKeys.getProfile,
     queryFn: accountProfileQuery,
+    select: data => data.data.data,
   });
   const { nameFormatted, nameInitial } = useMemo(() => {
-    const name = profile.data?.data.data?.nama ?? '';
+    const name = profile.data?.nama ?? '';
     const word = name
       .split(' ')
       .map(e => e[0]?.toUpperCase() + e.slice(1)?.toLocaleLowerCase());
@@ -31,7 +32,7 @@ export const useWakafListHeader = () => {
       nameFormatted: formattedName,
       nameInitial: initialName,
     };
-  }, [profile.data?.data.data]);
+  }, [profile.data]);
 
   return {
     openWakafForm,
