@@ -26,7 +26,7 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
   const { navigation } = props;
 
   return (
-    <Box safeArea>
+    <Box safeArea flex={1}>
       <StatusBar
         backgroundColor={useColorModeValue('white', theme.colors.dark[50])}
         barStyle={useColorModeValue('dark-content', 'light-content')}
