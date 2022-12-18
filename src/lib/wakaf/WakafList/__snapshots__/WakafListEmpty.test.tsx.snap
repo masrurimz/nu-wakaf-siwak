@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Unit Test WakafListEmpty.tsx  should render component correcty 1`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    Array [
+      Object {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <View
+    dataSet={Object {}}
+    style={
+      Object {
+        "alignItems": "center",
+        "flex": 0.7,
+        "justifyContent": "center",
+        "paddingLeft": 20,
+        "paddingRight": 20,
+      }
+    }
+  >
+    <SvgMock
+      height={200}
+      width={200}
+    />
+    <View
+      dataSet={Object {}}
+      style={
+        Object {
+          "height": 20,
+        }
+      }
+    />
+    <View
+      dataSet={Object {}}
+      style={Object {}}
+    >
+      <Text
+        dataSet={Object {}}
+        style={
+          Object {
+            "backgroundColor": undefined,
+            "color": "#171717",
+            "fontFamily": undefined,
+            "fontSize": 24,
+            "fontStyle": "normal",
+            "fontWeight": "700",
+            "letterSpacing": 0,
+            "lineHeight": 30,
+            "textAlign": "center",
+            "textDecorationLine": undefined,
+          }
+        }
+      >
+        Tidak ada data
+      </Text>
+      <View
+        dataSet={Object {}}
+        style={
+          Object {
+            "height": 8,
+          }
+        }
+      />
+      <Text
+        dataSet={Object {}}
+        style={
+          Object {
+            "backgroundColor": undefined,
+            "color": "#171717",
+            "fontFamily": undefined,
+            "fontSize": 14,
+            "fontStyle": "normal",
+            "fontWeight": "400",
+            "letterSpacing": 0,
+            "lineHeight": 21,
+            "textAlign": "center",
+            "textDecorationLine": undefined,
+          }
+        }
+      >
+        Tap tombol tambahkan aset untuk menambahkan data
+      </Text>
+    </View>
+  </View>
+</RNCSafeAreaProvider>
+`;

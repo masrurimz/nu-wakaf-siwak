@@ -11,7 +11,7 @@ const WakafListEmpty = (props: WakafListEmptyProps) => {
 
   const heading = 'Tidak ada data';
   const description = searchQuery
-    ? `Pencarian dengan "${searchQuery}" tidak menemukan apapun`
+    ? `Pencarian dengan kata kunci "${searchQuery}" tidak menemukan apapun`
     : 'Tap tombol tambahkan aset untuk menambahkan data';
 
   return (
