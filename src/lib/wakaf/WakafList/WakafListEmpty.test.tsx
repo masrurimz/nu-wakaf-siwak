@@ -1,26 +1,18 @@
+import { screen } from '@testing-library/react-native';
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { renderWithUtils } from '../../../common/utils';
 import WakafListEmpty from './WakafListEmpty';
-import { NativeBaseTestWrapper } from '../../../common/utils';
 
 describe('Unit Test WakafListEmpty.tsx ', () => {
   it('should render component correcty', () => {
-    const root = render(
-      <NativeBaseTestWrapper>
-        <WakafListEmpty searchQuery="" />
-      </NativeBaseTestWrapper>,
-    );
-    const tree = root.toJSON();
+    renderWithUtils(<WakafListEmpty searchQuery="" />);
 
+    const tree = screen.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it("should display 'Tap tombol tambahkan aset untuk menambahkan data' when empty search query given", () => {
-    render(
-      <NativeBaseTestWrapper>
-        <WakafListEmpty searchQuery="" />
-      </NativeBaseTestWrapper>,
-    );
+    renderWithUtils(<WakafListEmpty searchQuery="" />);
 
     expect(
       screen.getByText('Tap tombol tambahkan aset untuk menambahkan data'),
@@ -28,11 +20,7 @@ describe('Unit Test WakafListEmpty.tsx ', () => {
   });
 
   it("should display 'Pencarian dengan kata kunci 'masjid' tidak menemukan apapun' when 'masjid' search query given", () => {
-    render(
-      <NativeBaseTestWrapper>
-        <WakafListEmpty searchQuery="masjid" />
-      </NativeBaseTestWrapper>,
-    );
+    renderWithUtils(<WakafListEmpty searchQuery="masjid" />);
 
     expect(
       screen.getByText(

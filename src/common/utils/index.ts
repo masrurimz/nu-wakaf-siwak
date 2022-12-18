@@ -1,1 +1,1 @@
-export * from './NativeBaseTestWrapper';
+export * from './jest';
