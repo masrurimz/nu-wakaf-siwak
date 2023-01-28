@@ -32,7 +32,8 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
     isQueryLoading,
     useWakafListHeader = useWakafListHeaderIJ,
   } = props;
-  const { openWakafForm, nameFormatted, nameInitial } = useWakafListHeader();
+  const { openWakafForm, openAccountProfile, nameFormatted, nameInitial } =
+    useWakafListHeader();
 
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -129,7 +130,7 @@ const WakafListHeader: React.FC<WakafListHeaderProps> = props => {
             }}
             rounded="full"
             alignItems="center">
-            <Button size="xs" variant="link" onPress={() => {}}>
+            <Button size="xs" variant="link" onPress={openAccountProfile}>
               Akun Saya
             </Button>
             <Avatar
