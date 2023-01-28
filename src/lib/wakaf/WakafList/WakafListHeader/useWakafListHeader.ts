@@ -1,41 +1,20 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack/lib/typescript/src/types';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { RootStackParams } from '../../../../app/navigation';
-import { accountKeys, accountProfileQuery } from '../../../../app/services';
+import { useAccountProfileQuery } from '../../../../app/services';
 
 export const useWakafListHeader = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const openWakafForm = () => navigation.navigate('WakafFormScreen');
 
-  const profile = useQuery({
-    queryKey: accountKeys.getProfile,
-    queryFn: accountProfileQuery,
-    select: data => data.data.data,
-  });
-  const { nameFormatted, nameInitial } = useMemo(() => {
-    const name = profile.data?.nama ?? '';
-    const word = name
-      .split(' ')
-      .map(e => e[0]?.toUpperCase() + e.slice(1)?.toLocaleLowerCase());
-    const formattedName = word.join(' ');
+  const { nameFormatted, nameInitial } = useAccountProfileQuery();
 
-    const wordFormatted = formattedName.split(' ');
-    const initialName =
-      wordFormatted.length > 1
-        ? word[0][0] + word[word.length - 1][0]
-        : word[0][0] + word[0][word[0].length - 1];
-
-    return {
-      nameFormatted: formattedName,
-      nameInitial: initialName,
-    };
-  }, [profile.data]);
+  const openAccountProfile = () => navigation.navigate('AccountProfileScreen');
 
   return {
     openWakafForm,
+    openAccountProfile,
     nameFormatted,
     nameInitial,
   };
