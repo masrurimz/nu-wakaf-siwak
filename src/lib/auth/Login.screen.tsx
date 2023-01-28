@@ -8,15 +8,18 @@ import {
   FormControl,
   Heading,
   HStack,
+  Icon,
+  IconButton,
   Input,
   ScrollView,
   Stack,
   Text,
   useToast,
 } from 'native-base';
-import React from 'react';
+import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { sha1 } from 'react-native-sha1';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as yup from 'yup';
 import { RootStackParams } from '../../app/navigation';
 import { authKeys, authLoginMutation } from '../../app/services';
@@ -37,6 +40,8 @@ type LoginScreenProps = ScreenProps;
 const LoginScreen = (props: LoginScreenProps) => {
   const { navigation } = props;
   const toast = useToast();
+
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const { control, handleSubmit } = useForm<LoginUser>({
     resolver: yupResolver(loginUserSchema),
@@ -125,9 +130,23 @@ const LoginScreen = (props: LoginScreenProps) => {
                 <FormControl isInvalid={Boolean(error)}>
                   <FormControl.Label>Kata Sandi</FormControl.Label>
                   <Input
+                    secureTextEntry={!isPasswordVisible}
                     placeholder="Minimal 6 Karakter"
                     value={value}
                     onChangeText={onChange}
+                    InputRightElement={
+                      <IconButton
+                        p={1}
+                        mr={1}
+                        icon={
+                          <Icon
+                            as={MaterialCommunityIcons}
+                            name={isPasswordVisible ? 'eye' : 'eye-off'}
+                          />
+                        }
+                        onPress={() => setIsPasswordVisible(v => !v)}
+                      />
+                    }
                   />
                   <FormControl.ErrorMessage>
                     {error?.message}
