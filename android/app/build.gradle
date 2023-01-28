@@ -3,7 +3,7 @@ apply plugin: "com.facebook.react"
 
 import com.android.build.OutputFile
 
-/*
+/**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
@@ -55,7 +55,7 @@ react {
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
- * Set this to true to create four separate APKs instead of one:
+ * Set this to true to create four separate APKs instead of one,
  * one for each native architecture. This is useful if you don't
  * use App Bundles (https://developer.android.com/guide/app-bundle/)
  * and want to have separate APKs to upload to the Play Store.
@@ -63,9 +63,9 @@ apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 def enableSeparateBuildPerCPUArchitecture = false
 
 /**
- * Set this to true to Run Proguard on Release builds to minify the Java bytecode
+ * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
  */
-def enableProguardInReleaseBuilds = true
+def enableProguardInReleaseBuilds = false
 
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
@@ -81,11 +81,9 @@ def enableProguardInReleaseBuilds = true
 def jscFlavor = 'org.webkit:android-jsc:+'
 
 /**
- * Whether to enable the Hermes VM.
- *
  * Private function to get the list of Native Architectures you want to build.
  * This reads the value from reactNativeArchitectures in your gradle.properties
- * file and works together with the --active-arch-only flag of react-native run-android
+ * file and works together with the --active-arch-only flag of react-native run-android.
  */
 def reactNativeArchitectures() {
     def value = project.getProperties().get("reactNativeArchitectures")
