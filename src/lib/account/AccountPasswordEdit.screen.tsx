@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import React from 'react';
 
-const AccountPasswordEdit = () => {
+const AccountPasswordEditScreen = () => {
   return (
     <View>
       <Text>AccountPasswordEdit</Text>
@@ -9,4 +9,4 @@ const AccountPasswordEdit = () => {
   );
 };
 
-export default AccountPasswordEdit;
+export default AccountPasswordEditScreen;

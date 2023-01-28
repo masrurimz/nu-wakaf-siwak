@@ -11,6 +11,7 @@ import { useColorModeValue } from 'native-base';
 import RootStackHeader from './RootStackHeader';
 import { useAuthStore } from '../../lib/auth/auth.store';
 import { WakafListScreen } from '../../lib/wakaf';
+import { AccountProfileScreen } from '../../lib/account';
 
 export type RootStackParams = {
   SplashScreen: undefined;
@@ -20,6 +21,8 @@ export type RootStackParams = {
 
   WakafListScreen: undefined;
   WakafFormScreen: undefined;
+
+  AccountProfileScreen: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -49,15 +52,21 @@ export const RootStackNavigator = () => {
         header: RootStackHeader,
       }}>
       {isLoggedIn ? (
-        <RootStack.Group
-          screenOptions={{
-            headerShown: false,
-          }}>
-          <RootStack.Screen
-            name="WakafListScreen"
-            component={WakafListScreen}
-          />
-        </RootStack.Group>
+        <>
+          <RootStack.Group
+            screenOptions={{
+              headerShown: false,
+            }}>
+            <RootStack.Screen
+              name="WakafListScreen"
+              component={WakafListScreen}
+            />
+            <RootStack.Screen
+              name="AccountProfileScreen"
+              component={AccountProfileScreen}
+            />
+          </RootStack.Group>
+        </>
       ) : (
         <>
           <RootStack.Group

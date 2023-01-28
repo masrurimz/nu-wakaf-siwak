@@ -33,7 +33,8 @@ const WelcomeScreen = (props: WelcomeScreenProps) => {
       }}
       _dark={{
         bg: 'dark.50',
-      }}>
+      }}
+      safeArea>
       <StatusBar
         backgroundColor={useColorModeValue('white', theme.colors.dark[50])}
         barStyle={useColorModeValue('dark-content', 'light-content')}
