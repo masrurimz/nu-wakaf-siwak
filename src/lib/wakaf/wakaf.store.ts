@@ -1,6 +1,6 @@
 import zustandFlipper from 'react-native-flipper-zustand';
 import { devtools } from 'zustand/middleware';
-import create from 'zustand';
+import { create } from 'zustand';
 
 interface WakafStore {
   searchQuery: string;

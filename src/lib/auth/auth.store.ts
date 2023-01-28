@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import EncryptedStorage from 'react-native-encrypted-storage';
 import zustandFlipper from 'react-native-flipper-zustand';
